@@ -1,0 +1,29 @@
+{
+  "generator-angularjs-library": {
+    "props": {
+      "author": {
+        "name": "cfong",
+        "email": "cfong@mosspaper.com"
+      },
+      "libraryName": {
+        "original": "mosspaper-common",
+        "camelized": "mosspaperCommon",
+        "dasherized": "mosspaper-common",
+        "slugified": "mosspaper-common",
+        "parts": [
+          "mosspaper",
+          "common"
+        ]
+      },
+      "includeModuleDirectives": true,
+      "includeModuleFilters": true,
+      "includeModuleServices": true,
+      "includeAngularModuleResource": true,
+      "includeAngularModuleCookies": true,
+      "includeAngularModuleSanitize": true,
+      "librarySrcDirectory": "src/mosspaper-common",
+      "libraryUnitTestDirectory": "test/unit/mosspaper-common",
+      "libraryUnitE2eDirectory": "test/e2e/mosspaper-common"
+    }
+  }
+}
