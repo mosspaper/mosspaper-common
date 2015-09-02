@@ -1,4 +1,4 @@
-angular.module('mosspaperCommon.services')
+angular.module('mosspaperCommon')
     .factory('Utils', function ($q) {
         return {
             isImage: function (src) {
