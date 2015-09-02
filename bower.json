@@ -7,7 +7,9 @@
       "email": "cfong@mosspaper.com"
     }
   ],
-  "main": ["dist/mosspaper-common.js"],
+  "main": [
+    "dist/mosspaper-common.js"
+  ],
   "ignore": [
     "src",
     "test",
@@ -23,5 +25,8 @@
     "angular-resource": ">=1.2.0",
     "angular-cookies": ">=1.2.0",
     "angular-sanitize": ">=1.2.0"
+  },
+  "resolutions": {
+    "angular": "1.2.28"
   }
 }
