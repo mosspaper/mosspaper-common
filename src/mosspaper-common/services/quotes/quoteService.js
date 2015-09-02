@@ -1,7 +1,7 @@
-// Services to get Customer data
+// Services to get Quote data
 angular
     .module('mosspaperCommon.services')
-    .service('quoteService', function ($http, API_SERVER) {
+    .service('commonQuoteService', function ($http, API_SERVER) {
 
         var urlBase = API_SERVER + 'quotes';
 

@@ -3,7 +3,6 @@
     // Create all modules and define dependencies to make sure they exist
     // and are loaded in the correct order to satisfy dependency injection
     // before all nested files are concatenated by Gulp
-    angular.module('mosspaperCommon', []);
 
     // Config
     angular.module('mosspaperCommon.config', [])
@@ -28,7 +27,7 @@
 
 })(angular);
 
-angular.module('mosspaperCommon.services')
+angular.module('mosspaperCommon.services', [])
     .factory('Utils', function ($q) {
         return {
             isImage: function (src) {
@@ -210,10 +209,10 @@ angular.module('mosspaperCommon.services')
     });
 
 
-// Services to get Customer data
+// Services to get Quote data
 angular
     .module('mosspaperCommon.services')
-    .service('quoteService', function ($http, API_SERVER) {
+    .service('commonQuoteService', function ($http, API_SERVER) {
 
         var urlBase = API_SERVER + 'quotes';
 

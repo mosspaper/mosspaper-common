@@ -27,6 +27,9 @@ var sourceFiles = [
     path.join(sourceDirectory, '/**/*.js')
 ];
 
+var distPath = './dist/';
+var devDistPath = '../mosspaper-app/bower_components/mosspaper-common/dist/';
+
 var lintFiles = [
     'gulpfile.js',
     // Karma configuration
@@ -49,6 +52,11 @@ gulp.task('build', function () {
 gulp.task('process-all', function (done) {
     runSequence('jshint', 'test-src', 'build', done);
 });
+
+gulp.task('copy-to-bower', function(done) {
+    gulp.src(distPath + '*.js')
+        .pipe(gulp.dest(devDistPath));
+})
 
 /**
  * Watch task
@@ -104,3 +112,8 @@ gulp.task('test-dist-minified', function (done) {
 gulp.task('default', function () {
     runSequence('process-all', 'watch');
 });
+
+gulp.task('dev', function () {
+    runSequence('process-all', 'copy-to-bower');
+});
+
