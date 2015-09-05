@@ -3,7 +3,7 @@
 /////////////////////////////////////////////////////////
 angular
     .module('mosspaperCommon.services')
-    .service('itemsService', function ($http, API_SERVER) {
+    .service('itemsAPIService', function ($http, API_SERVER) {
         var urlBase = API_SERVER + 'products';
 
         this.getCategories = function () {
