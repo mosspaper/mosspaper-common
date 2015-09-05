@@ -56,7 +56,7 @@ gulp.task('process-all', function (done) {
 gulp.task('copy-to-bower', function(done) {
     gulp.src(distPath + '*.js')
         .pipe(gulp.dest(devDistPath));
-})
+});
 
 /**
  * Watch task

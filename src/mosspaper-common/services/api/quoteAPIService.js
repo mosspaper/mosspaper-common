@@ -1,7 +1,7 @@
 // Services to get Quote data
 angular
     .module('mosspaperCommon.services')
-    .service('commonQuoteService', function ($http, API_SERVER) {
+    .service('quoteAPIService', function ($http, API_SERVER) {
 
         var urlBase = API_SERVER + 'quotes';
 
@@ -15,7 +15,7 @@ angular
 
         this.getQuoteDetails = function (id, action) {
 
-            queryParams = '';
+            var queryParams = '';
             if (action) {
                 queryParams = '?action=' + action;
             }
@@ -79,8 +79,8 @@ angular
         };
 
         this.deleteDocument = function (uuid) {
-            return $http.delete(this.getURLBase() + '/document/' + uuid + '/')
-        }
+            return $http.delete(this.getURLBase() + '/document/' + uuid + '/');
+        };
 
         this.getPayment = function (uuid) {
             return $http.get(this.getURLBase() + '/payment/' + uuid + '/');
