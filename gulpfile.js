@@ -7,6 +7,7 @@ var path = require('path');
 var plumber = require('gulp-plumber');
 var runSequence = require('run-sequence');
 var jshint = require('gulp-jshint');
+var stylish = require('jshint-stylish');
 
 /**
  * File patterns
@@ -75,8 +76,8 @@ gulp.task('jshint', function () {
         .pipe(plumber())
         .pipe(jshint())
         .pipe(jshint({expr: true}))
-        .pipe(jshint.reporter('jshint-stylish'));
-        //.pipe(jshint.reporter('fail'));
+        .pipe(jshint.reporter(stylish));
+        //.pipe(jshint.reporter(stylish))
 });
 
 /**
@@ -113,6 +114,7 @@ gulp.task('default', function () {
     runSequence('process-all', 'watch');
 });
 
+// gulp development
 gulp.task('dev', function () {
     runSequence('process-all', 'copy-to-bower');
 });
