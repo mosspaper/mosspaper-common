@@ -1,5 +1,5 @@
-//(function (angular) {
-
+(function (angular) {
+    'use strict';
     // Create all modules and define dependencies to make sure they exist
     // and are loaded in the correct order to satisfy dependency injection
     // before all nested files are concatenated by Gulp
@@ -14,9 +14,11 @@
     angular.module('mosspaperCommon.directives', []);
     angular.module('mosspaperCommon.filters', []);
     angular.module('mosspaperCommon.services', []);
+    angular.module('mosspaperCommon.constants', []);
     angular.module('mosspaperCommon',
         [
             'mosspaperCommon.config',
+            'mosspaperCommon.constants',
             'mosspaperCommon.directives',
             'mosspaperCommon.filters',
             'mosspaperCommon.services',
@@ -25,4 +27,4 @@
             'ngSanitize'
         ]);
 
-//})(angular);
+})(angular);

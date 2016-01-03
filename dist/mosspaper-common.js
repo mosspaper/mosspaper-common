@@ -1,5 +1,5 @@
-//(function (angular) {
-
+(function (angular) {
+    'use strict';
     // Create all modules and define dependencies to make sure they exist
     // and are loaded in the correct order to satisfy dependency injection
     // before all nested files are concatenated by Gulp
@@ -14,9 +14,11 @@
     angular.module('mosspaperCommon.directives', []);
     angular.module('mosspaperCommon.filters', []);
     angular.module('mosspaperCommon.services', []);
+    angular.module('mosspaperCommon.constants', []);
     angular.module('mosspaperCommon',
         [
             'mosspaperCommon.config',
+            'mosspaperCommon.constants',
             'mosspaperCommon.directives',
             'mosspaperCommon.filters',
             'mosspaperCommon.services',
@@ -25,23 +27,23 @@
             'ngSanitize'
         ]);
 
-//})(angular);
+})(angular);
+
+angular.module('mosspaperCommon.constants', [])
+    .value('APPLE_APP_ID', '1021413203')
+    .value('GOOGLE_APP_ID', 'com.mosspaper.mobile3')
+    .value('STATUS_DRAFT', 'S')
+    .value('STATUS_APPROVED', 'A')
+    .value('STATUS_ACTIVE', 'AC')
+    .value('STATUS_PENDING', 'P')
+    .value('STATUS_EXPIRING', 'PE')
+    .value('STATUS_EXPIRED', 'E')
+    .value('STATUS_REJECTED', 'R')
+    .value('STATUS_INACTIVE', 'I');
+
 
 angular.module('mosspaperCommon.services', [])
-    .constant('APPLE_APP_ID', '1021413203')
-    .constant('GOOGLE_APP_ID', 'com.mosspaper.mobile3')
-    .constant('STATUS_DRAFT', 'S')
-    .constant('STATUS_APPROVED', 'A')
-    .constant('STATUS_ACTIVE', 'AC')
-    .constant('STATUS_PENDING', 'P')
-    .constant('STATUS_EXPIRING', 'PE')
-    .constant('STATUS_EXPIRED', 'E')
-    .constant('STATUS_REJECTED', 'R')
-    .constant('STATUS_INACTIVE', 'I');
-
-
-angular.module('mosspaperCommon.services', [])
-    .factory('Utils', function ($q) {
+    .factory('Utils', ["$q", function ($q) {
         return {
             isImage: function (src) {
                 var deferred = $q.defer();
@@ -219,7 +221,7 @@ angular.module('mosspaperCommon.services', [])
                 });
             }
         };
-    });
+    }]);
 
 
 /**
@@ -229,7 +231,7 @@ angular.module('mosspaperCommon.services', [])
  */
 angular
     .module('mosspaperCommon.services')
-    .service('contractsAPIService', function ($http, API_SERVER) {
+    .service('contractsAPIService', ["$http", "API_SERVER", function ($http, API_SERVER) {
 
         var urlBase = API_SERVER + 'contracts';
 
@@ -371,13 +373,13 @@ angular
         };
 
 
-    });
+    }]);
 /////////////////////////////////////////////////////////
 // Product and Category Services
 /////////////////////////////////////////////////////////
 angular
     .module('mosspaperCommon.services')
-    .service('itemsAPIService', function ($http, API_SERVER) {
+    .service('itemsAPIService', ["$http", "API_SERVER", function ($http, API_SERVER) {
         var urlBase = API_SERVER + 'products';
 
         this.getCategories = function () {
@@ -446,11 +448,11 @@ angular
             return $http.get(urlBase + '/top', {params: params});
         };
 
-    });
+    }]);
 // Services to get Quote data
 angular
     .module('mosspaperCommon.services')
-    .service('quoteAPIService', function ($http, API_SERVER) {
+    .service('quoteAPIService', ["$http", "API_SERVER", function ($http, API_SERVER) {
 
         var urlBase = API_SERVER + 'quotes';
 
@@ -585,7 +587,7 @@ angular
             return $http.post(this.getURLBase() + '/requests/delete/', data);
         };
 
-    });
+    }]);
 
 /**
  * Created by cfong on 9/4/15.
@@ -593,7 +595,7 @@ angular
 
 angular
     .module('mosspaperCommon.services')
-    .factory('itemsManager', function ($http, $q, itemsAPIService) {
+    .factory('itemsManager', ["$http", "$q", "itemsAPIService", function ($http, $q, itemsAPIService) {
 
         var itemsManager = {
             _pool: {},
@@ -673,10 +675,10 @@ angular
         };
 
         return itemsManager;
-    });
+    }]);
 angular
     .module('mosspaperCommon.services')
-    .service('notificationAPIService', function ($http, API_SERVER) {
+    .service('notificationAPIService', ["$http", "API_SERVER", function ($http, API_SERVER) {
 
         var urlBase = API_SERVER + 'user/notification/';
 
@@ -692,10 +694,10 @@ angular
             return $http.delete(urlBase + 'delete/' + id + '/');
         };
 
-    });
+    }]);
 angular
     .module('mosspaperCommon.services')
-    .factory('NotificationFactory', function ($http, $q, notificationAPIService) {
+    .factory('NotificationFactory', ["$http", "$q", "notificationAPIService", function ($http, $q, notificationAPIService) {
 
         var notificationFactory = {
 
@@ -740,4 +742,4 @@ angular
 
         return notificationFactory;
 
-    });
+    }]);

@@ -8,6 +8,7 @@ var plumber = require('gulp-plumber');
 var runSequence = require('run-sequence');
 var jshint = require('gulp-jshint');
 var stylish = require('jshint-stylish');
+var ngAnnotate = require('gulp-ng-annotate');
 
 /**
  * File patterns
@@ -40,6 +41,7 @@ var lintFiles = [
 gulp.task('build', function () {
     gulp.src(sourceFiles)
         .pipe(plumber())
+        .pipe(ngAnnotate())
         .pipe(concat('mosspaper-common.js'))
         .pipe(gulp.dest('./dist/'))
         .pipe(uglify())

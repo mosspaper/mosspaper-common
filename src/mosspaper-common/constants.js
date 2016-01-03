@@ -1,12 +1,12 @@
-angular.module('mosspaperCommon.services', [])
-    .constant('APPLE_APP_ID', '1021413203')
-    .constant('GOOGLE_APP_ID', 'com.mosspaper.mobile3')
-    .constant('STATUS_DRAFT', 'S')
-    .constant('STATUS_APPROVED', 'A')
-    .constant('STATUS_ACTIVE', 'AC')
-    .constant('STATUS_PENDING', 'P')
-    .constant('STATUS_EXPIRING', 'PE')
-    .constant('STATUS_EXPIRED', 'E')
-    .constant('STATUS_REJECTED', 'R')
-    .constant('STATUS_INACTIVE', 'I');
+angular.module('mosspaperCommon.constants', [])
+    .value('APPLE_APP_ID', '1021413203')
+    .value('GOOGLE_APP_ID', 'com.mosspaper.mobile3')
+    .value('STATUS_DRAFT', 'S')
+    .value('STATUS_APPROVED', 'A')
+    .value('STATUS_ACTIVE', 'AC')
+    .value('STATUS_PENDING', 'P')
+    .value('STATUS_EXPIRING', 'PE')
+    .value('STATUS_EXPIRED', 'E')
+    .value('STATUS_REJECTED', 'R')
+    .value('STATUS_INACTIVE', 'I');
 
