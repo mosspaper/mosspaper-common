@@ -15,9 +15,11 @@
     angular.module('mosspaperCommon.filters', []);
     angular.module('mosspaperCommon.services', []);
     angular.module('mosspaperCommon.constants', []);
+    angular.module('mosspaperCommon.events', []);
     angular.module('mosspaperCommon',
         [
             'mosspaperCommon.config',
+            'mosspaperCommon.events',
             'mosspaperCommon.constants',
             'mosspaperCommon.directives',
             'mosspaperCommon.filters',
@@ -42,6 +44,71 @@ angular.module('mosspaperCommon.constants', [])
     .value('STATUS_INACTIVE', 'I');
 
 
+angular.module('mosspaperCommon.filters', [])
+    .filter('ago', function () {
+        return function (input) {
+            var m = moment(input);
+            if (m.isValid()) {
+                return m.fromNow();
+            } else {
+                return input;
+            }
+        };
+    })
+    .filter('percentage', ["$filter", function ($filter) {
+        return function (input, decimals) {
+            return $filter('number')(input, decimals) + '%';
+        };
+    }])
+    .filter('capitalize', function () {
+        return function (input, scope) {
+            if (input) {
+                input = input.toLowerCase();
+                return input.substring(0, 1).toUpperCase() + input.substring(1);
+            } else {
+                return input;
+            }
+        };
+    })
+    .filter('propertiesFilter', ["Utils", function (Utils) {
+
+        var filterFunction = function (items, props) {
+            var out = [];
+
+            if (angular.isArray(items) && !Utils.isObjectValuesEmpty(props)) {
+                items.forEach(function (item) {
+                    var itemMatches = false;
+
+                    var keys = Object.keys(props);
+                    for (var i = 0; i < keys.length; i++) {
+                        var prop = keys[i];
+                        if (props[prop]) {
+                            var text = props[prop].toLowerCase();
+                            if (item[prop] && item[prop].toString().toLowerCase().indexOf(text) !== -1) {
+                                itemMatches = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (itemMatches) {
+                        out.push(item);
+                    }
+                });
+            } else {
+                // Let the output be the input untouched
+                out = items;
+            }
+
+            return out;
+        };
+
+
+        return filterFunction;
+
+    }]);
+angular.module('mosspaperCommon.events', [])
+    .constant('UPDATE_NOTIFICATIONS_EVENT', 'notifications.update');
 angular.module('mosspaperCommon.services', [])
     .factory('Utils', ["$q", function ($q) {
         return {
@@ -697,29 +764,45 @@ angular
     }]);
 angular
     .module('mosspaperCommon.services')
-    .factory('NotificationFactory', ["$http", "$q", "notificationAPIService", function ($http, $q, notificationAPIService) {
+    .factory('NotificationFactory', ["$http", "$rootScope", "$q", "notificationAPIService", "UPDATE_NOTIFICATIONS_EVENT", "Utils", function ($http, $rootScope, $q, notificationAPIService, UPDATE_NOTIFICATIONS_EVENT, Utils) {
+        this._items = [];
+
+        var broadcast = function() {
+            $rootScope.$emit(UPDATE_NOTIFICATIONS_EVENT, this._items);
+        };
 
         var notificationFactory = {
 
-            fetchAll: function () {
+            fetchAll: function (interval) {
                 var deferred = $q.defer();
-
-                notificationAPIService.getNotifcations()
-                    .success(function (items) {
-                        deferred.resolve(items);
-                    })
-                    .error(function () {
-                        deferred.reject();
-                    });
+                if (this._items) {
+                    console.log("get from cache")
+                    deferred.resolve(this._items);
+                } else {
+                    notificationAPIService.getNotifcations()
+                        .success(function (items) {
+                            deferred.resolve(items);
+                            this._items = items;
+                            broadcast();
+                        })
+                        .error(function () {
+                            deferred.reject();
+                        });
+                }
 
                 return deferred.promise;
             },
-            deleteNotification: function (notificationId) {
+            getNotifications: function() {
+                return _items;
+            },
+            deleteNotification: function (notification) {
                 var deferred = $q.defer();
 
-                notificationAPIService.deleteNotifiction(notificationId)
-                    .success(function (items) {
-                        deferred.resolve(items);
+                notificationAPIService.deleteNotifiction(notification.id)
+                    .success(function () {
+                        Utils.removeByProperty(this._items, notification, 'id');
+                        deferred.resolve();
+                        broadcast();
                     })
                     .error(function () {
                         deferred.reject();
@@ -732,6 +815,8 @@ angular
                 notificationAPIService.deleteNotifiction('all')
                     .success(function (items) {
                         deferred.resolve(items);
+                        this._items = [];
+                        broadcast();
                     })
                     .error(function () {
                         deferred.reject();

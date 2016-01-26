@@ -1,28 +1,44 @@
 angular
     .module('mosspaperCommon.services')
-    .factory('NotificationFactory', function ($http, $q, notificationAPIService) {
+    .factory('NotificationFactory', function ($http, $rootScope, $q, notificationAPIService, UPDATE_NOTIFICATIONS_EVENT, Utils) {
+        this._items = [];
+
+        var broadcast = function() {
+            $rootScope.$emit(UPDATE_NOTIFICATIONS_EVENT, this._items);
+        };
 
         var notificationFactory = {
 
-            fetchAll: function () {
+            fetchAll: function (interval) {
                 var deferred = $q.defer();
-
-                notificationAPIService.getNotifcations()
-                    .success(function (items) {
-                        deferred.resolve(items);
-                    })
-                    .error(function () {
-                        deferred.reject();
-                    });
+                if (this._items) {
+                    console.log("get from cache")
+                    deferred.resolve(this._items);
+                } else {
+                    notificationAPIService.getNotifcations()
+                        .success(function (items) {
+                            deferred.resolve(items);
+                            this._items = items;
+                            broadcast();
+                        })
+                        .error(function () {
+                            deferred.reject();
+                        });
+                }
 
                 return deferred.promise;
             },
-            deleteNotification: function (notificationId) {
+            getNotifications: function() {
+                return _items;
+            },
+            deleteNotification: function (notification) {
                 var deferred = $q.defer();
 
-                notificationAPIService.deleteNotifiction(notificationId)
-                    .success(function (items) {
-                        deferred.resolve(items);
+                notificationAPIService.deleteNotifiction(notification.id)
+                    .success(function () {
+                        Utils.removeByProperty(this._items, notification, 'id');
+                        deferred.resolve();
+                        broadcast();
                     })
                     .error(function () {
                         deferred.reject();
@@ -35,6 +51,8 @@ angular
                 notificationAPIService.deleteNotifiction('all')
                     .success(function (items) {
                         deferred.resolve(items);
+                        this._items = [];
+                        broadcast();
                     })
                     .error(function () {
                         deferred.reject();

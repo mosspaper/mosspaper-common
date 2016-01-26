@@ -15,9 +15,11 @@
     angular.module('mosspaperCommon.filters', []);
     angular.module('mosspaperCommon.services', []);
     angular.module('mosspaperCommon.constants', []);
+    angular.module('mosspaperCommon.events', []);
     angular.module('mosspaperCommon',
         [
             'mosspaperCommon.config',
+            'mosspaperCommon.events',
             'mosspaperCommon.constants',
             'mosspaperCommon.directives',
             'mosspaperCommon.filters',
